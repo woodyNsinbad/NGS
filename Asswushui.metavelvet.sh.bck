@@ -1,0 +1,29 @@
+#### MAKE CONTIG ###
+
+/home/mengfei/workdir/pipline/metagenomics/software/velvet-1.2.10/velveth /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd 31 -fastq -separate -shortPaired /share/seq_dir1/Item1/BFC2014485-20/150512_D00477_0280_AH2YWJBCXX/zhangyanDNA-LJ_L1_I008.R1.clean.fastq.gz  /share/seq_dir1/Item1/BFC2014485-20/150512_D00477_0280_AH2YWJBCXX/zhangyanDNA-LJ_L1_I008.R2.clean.fastq.gz
+/home/mengfei/workdir/pipline/metagenomics/software/velvet-1.2.10/velvetg /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd -exp_cov auto -ins_length 500 -read_trkg yes 
+/home/mengfei/workdir/pipline/metagenomics/software/MetaVelvet-1.2.01/meta-velvetg  /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd -ins_length 500 -amos_file yes -scaffolding yes
+
+################
+
+### BAMBUS2 ####
+
+### Prepare ###
+
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/bank-transact -m /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/meta-velvetg.asm.afg -b /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/ -cf  ## FAST
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/bank-unlock /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/
+
+### BEGIN ###
+
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/clk -b  /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/ ## FAST
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/Bundler -b /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/ -t M ## FAST
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/MarkRepeats -b /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/ -redundancy 1  | tee /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/wushui.repeat.txt ## SLOW ##!!!
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/OrientContigs -b /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank -redundancy 1 -repeats /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/wushui.repeat.txt -all
+
+#####################################
+
+
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/untangle -e /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/wushui.evidence.xml -s /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/wushui.out.xml -o /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/wushui.untangle.xml 
+/home/mengfei/workdir/pipline/metagenomics/software/metAMOS-1.5rc3/AMOS/Linux-x86_64/bin/bank2fasta -d -b /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet2nd/bank/ | tee wushui.contig
+ 
+/home/mengfei/workdir/pipline/metagenomics/software/MetaGeneMark_linux_64/mgm/gmhmmp  /home/wudi/workdir/test3/metavelvetwushui/wushui.metavelvet -ins_length 750 
